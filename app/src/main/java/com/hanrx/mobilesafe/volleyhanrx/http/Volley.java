@@ -21,6 +21,8 @@ public class Volley {
         IHttpListener httpListener = new JsonDealListener<>(response, dataListener);
         requestHolder.setHttpService(httpService);
         requestHolder.setHttpListener(httpListener);
+        //将请求参数赋值
+        requestHolder.setRequestInfo(requestInfo);
         HttpTask<T> httpTask = new HttpTask<>(requestHolder);
         try {
             ThreadPoolManager.getInstance().execte(new FutureTask<Object>(httpTask, null));

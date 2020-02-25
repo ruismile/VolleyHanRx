@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 public class ThreadPoolManager {
 
-    private static final String TAG = "ThreadPoolManager";
+    private static final String TAG = "hanrx";
 
     private static ThreadPoolManager instance = new ThreadPoolManager();
 

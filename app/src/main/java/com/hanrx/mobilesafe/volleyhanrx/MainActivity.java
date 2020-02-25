@@ -11,8 +11,9 @@ import com.hanrx.mobilesafe.volleyhanrx.http.interfaces.IDataListener;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String url = "http://192.168.100.8080/UserRecord/LoginServlet";
-    private static final String TAG = "MainActivity";
+    //public static final String url = "http://192.168.100.8080/UserRecord/LoginServlet";
+    public static final String url = "http://v.juhe.cn/toutiao/index?type=top&key=6ccd6aae7830a31618bc1aab1e41be33";
+    private static final String TAG = "hanrx";
     TextView textView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
      */
     public  void login(View view)
     {
-        User user=new User();
+        /*User user=new User();
         user.setName("13343491234");
         user.setPassword("123456");
         for (int i=0;i<50;i++)
@@ -44,6 +45,17 @@ public class MainActivity extends AppCompatActivity {
                     Log.i(TAG,"获取失败");
                 }
             });
-        }
+        }*/
+        Volley.sendRequest(null, url, NewsPager.class, new IDataListener<NewsPager>() {
+            @Override
+            public void onSuccess(NewsPager newsPager) {
+                Log.i(TAG,newsPager.toString());
+            }
+
+            @Override
+            public void onFail() {
+                Log.i(TAG,"获取失败");
+            }
+        });
     }
 }
