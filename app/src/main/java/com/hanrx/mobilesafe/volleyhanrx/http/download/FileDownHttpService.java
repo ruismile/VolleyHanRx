@@ -7,7 +7,7 @@ import com.hanrx.mobilesafe.volleyhanrx.http.interfaces.IHttpService;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -32,7 +32,7 @@ public class FileDownHttpService implements IHttpService {
     private IHttpListener mHttpListener;
 
     private HttpClient mHttpClient = new DefaultHttpClient();
-    private HttpPost mHttpPost;
+    private HttpGet mHttpGet;
     private String url;
 
     private byte[] mRequestData;
@@ -49,12 +49,12 @@ public class FileDownHttpService implements IHttpService {
 
     @Override
     public void excute() {
+        mHttpGet = new HttpGet(url);
         constructHeader();
-        mHttpPost = new HttpPost(url);
-        ByteArrayEntity byteArrayEntity = new ByteArrayEntity(mRequestData);
-        mHttpPost.setEntity(byteArrayEntity);
+        /*ByteArrayEntity byteArrayEntity = new ByteArrayEntity(mRequestData);
+        mHttpGet.setEntity(byteArrayEntity);*/
         try {
-            mHttpClient.execute(mHttpPost, mHttpResponseHandler);
+            mHttpClient.execute(mHttpGet, mHttpResponseHandler);
         } catch (IOException e) {
             mHttpListener.onFail();
         }
@@ -66,7 +66,7 @@ public class FileDownHttpService implements IHttpService {
             String key = (String) iterator.next();
             String value = headerMap.get(key);
             Log.i(TAG, "请求头信息 " + key + " value " + value);
-            mHttpPost.addHeader(key, value);
+            mHttpGet.addHeader(key, value);
         }
     }
 
@@ -76,12 +76,12 @@ public class FileDownHttpService implements IHttpService {
 
     @Override
     public void setHttpListener(IHttpListener httpListener) {
-
+        this.mHttpListener = httpListener;
     }
 
     @Override
     public void setRequestData(byte[] requestData) {
-
+        this.mRequestData = requestData;
     }
 
     @Override

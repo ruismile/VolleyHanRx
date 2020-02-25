@@ -1,11 +1,13 @@
 package com.hanrx.mobilesafe.volleyhanrx.http.download;
 
+import android.os.Handler;
+import android.os.Looper;
+
 import com.hanrx.mobilesafe.volleyhanrx.http.download.interfaces.IDownListener;
 import com.hanrx.mobilesafe.volleyhanrx.http.download.interfaces.IDownloadServiceCallable;
 import com.hanrx.mobilesafe.volleyhanrx.http.interfaces.IHttpService;
 
 import org.apache.http.HttpEntity;
-import org.apache.http.protocol.HttpService;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -28,8 +30,11 @@ public class DownLoadListener implements IDownListener {
 
     private IHttpService mHttpService;
 
+    //得到主线程
+    private Handler mHandler = new Handler(Looper.getMainLooper());
+
     public void addHttpHeader(Map<String, String> headerMap) {
-        if ()
+
     }
 
     public DownLoadListener(DownLoadItemInfo downLoadItemInfo,
@@ -47,10 +52,13 @@ public class DownLoadListener implements IDownListener {
     }
 
     @Override
-    public void setHttpService(HttpService httpService) {
-
+    public void setHttpService(IHttpService httpService) {
+        this.mHttpService = httpService;
     }
 
+    /**
+     * 设置取消接口
+     */
     @Override
     public void setCancelCalle() {
 
@@ -181,6 +189,15 @@ public class DownLoadListener implements IDownListener {
         mDownLoadItemInfo.setCurrentLength(downlength);
 
         if (mDownloadServiceCallable != null) {
+            DownLoadItemInfo copyDownItemInfo = mDownLoadItemInfo.copy();
+            synchronized (this.mDownloadServiceCallable) {
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mDownloadServiceCallable.onCurrentSizeChanged(mDownLoadItemInfo, downlength, speed);
+                    }
+                });
+            }
 
         }
     }
@@ -190,7 +207,18 @@ public class DownLoadListener implements IDownListener {
      * @param downloading
      */
     private void downloadStatusChange(DownloadStatus downloading) {
-
+        mDownLoadItemInfo.setStatus(downloading);
+        final DownLoadItemInfo copyDownLoadItemInfo = mDownLoadItemInfo.copy();
+        if (mDownloadServiceCallable != null) {
+            synchronized (this.mDownloadServiceCallable) {
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mDownloadServiceCallable.onDownloadStatusChanged(copyDownLoadItemInfo);
+                    }
+                });
+            }
+        }
     }
 
     /**
@@ -198,7 +226,18 @@ public class DownLoadListener implements IDownListener {
      * @param totalLength
      */
     private void receviceTotalLength(long totalLength) {
-
+        mDownLoadItemInfo.setCurrentLength(totalLength);
+        final DownLoadItemInfo copyDownLoadItemInfo = mDownLoadItemInfo.copy();
+        if (mDownloadServiceCallable != null) {
+            synchronized (this.mDownloadServiceCallable) {
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mDownloadServiceCallable.onTotalLengthReceived(copyDownLoadItemInfo);
+                    }
+                });
+            }
+        }
     }
 
 

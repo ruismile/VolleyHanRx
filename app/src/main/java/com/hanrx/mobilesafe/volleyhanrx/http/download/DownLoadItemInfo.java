@@ -15,6 +15,15 @@ public class DownLoadItemInfo extends BaseEntity<DownLoadItemInfo> {
 
     private DownloadStatus mStatus;
 
+    public DownLoadItemInfo(String url, String filePath) {
+        this.url = url;
+        this.filePath = filePath;
+    }
+
+    public DownLoadItemInfo() {
+
+    }
+
     //下载状态
     public DownloadStatus getStatus() {
         return mStatus;

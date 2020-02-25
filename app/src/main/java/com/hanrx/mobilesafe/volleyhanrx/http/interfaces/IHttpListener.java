@@ -2,6 +2,8 @@ package com.hanrx.mobilesafe.volleyhanrx.http.interfaces;
 
 import org.apache.http.HttpEntity;
 
+import java.util.Map;
+
 public interface IHttpListener {
 
     /**
@@ -12,4 +14,6 @@ public interface IHttpListener {
     void onSuccess(HttpEntity httpEntity);
 
     void onFail();
+
+    void addHttpHeader(Map<String, String> headerMap);
 }

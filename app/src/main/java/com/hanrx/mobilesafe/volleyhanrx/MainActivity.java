@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.hanrx.mobilesafe.volleyhanrx.http.Volley;
+import com.hanrx.mobilesafe.volleyhanrx.http.download.DownFileManager;
 import com.hanrx.mobilesafe.volleyhanrx.http.interfaces.IDataListener;
 
 public class MainActivity extends AppCompatActivity {
@@ -46,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }*/
-        Volley.sendRequest(null, url, NewsPager.class, new IDataListener<NewsPager>() {
+        /*Volley.sendRequest(null, url, NewsPager.class, new IDataListener<NewsPager>() {
             @Override
             public void onSuccess(NewsPager newsPager) {
                 Log.i(TAG,newsPager.toString());
@@ -56,6 +57,9 @@ public class MainActivity extends AppCompatActivity {
             public void onFail() {
                 Log.i(TAG,"获取失败");
             }
-        });
+        });*/
+
+        DownFileManager downFileManager = new DownFileManager();
+        downFileManager.down("http://gdown.baidu.com/data/wisegame/8be18d2c0dc8a9c9/WPSOffice_177.apk");
     }
 }
