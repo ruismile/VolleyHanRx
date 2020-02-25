@@ -15,7 +15,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 /**
- *
+ * 处理json结果的
  * @param <M> 对应响应类
  */
 
