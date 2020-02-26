@@ -35,6 +35,10 @@ public class DownLoadListener implements IDownListener {
 
     public void addHttpHeader(Map<String, String> headerMap) {
 
+        long length = getFile().length();
+        if (length > 0L) {
+            headerMap.put("RANGE", "bytes=" + length + "-");
+        }
     }
 
     public DownLoadListener(DownLoadItemInfo downLoadItemInfo,
@@ -135,6 +139,7 @@ public class DownLoadListener implements IDownListener {
                         count = 0;
                         calcSpeedLen = 0L;
                         receiveLen = 0L;
+                        //应该保存到数据库
                         this.downloadLengthChange(this.breakPoint + getLen, totalLength, speed);
                     }
                 }
@@ -207,7 +212,7 @@ public class DownLoadListener implements IDownListener {
      * @param downloading
      */
     private void downloadStatusChange(DownloadStatus downloading) {
-        mDownLoadItemInfo.setStatus(downloading);
+        mDownLoadItemInfo.setStatus(downloading.getValue());
         final DownLoadItemInfo copyDownLoadItemInfo = mDownLoadItemInfo.copy();
         if (mDownloadServiceCallable != null) {
             synchronized (this.mDownloadServiceCallable) {

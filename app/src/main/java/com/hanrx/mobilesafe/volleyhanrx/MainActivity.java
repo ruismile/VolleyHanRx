@@ -2,13 +2,10 @@ package com.hanrx.mobilesafe.volleyhanrx;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import com.hanrx.mobilesafe.volleyhanrx.http.Volley;
 import com.hanrx.mobilesafe.volleyhanrx.http.download.DownFileManager;
-import com.hanrx.mobilesafe.volleyhanrx.http.interfaces.IDataListener;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -60,6 +57,6 @@ public class MainActivity extends AppCompatActivity {
         });*/
 
         DownFileManager downFileManager = new DownFileManager();
-        downFileManager.down("http://gdown.baidu.com/data/wisegame/8be18d2c0dc8a9c9/WPSOffice_177.apk");
+        downFileManager.reallyDown("http://gdown.baidu.com/data/wisegame/8be18d2c0dc8a9c9/WPSOffice_177.apk");
     }
 }

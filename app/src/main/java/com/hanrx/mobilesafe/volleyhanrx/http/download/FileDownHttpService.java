@@ -91,7 +91,7 @@ public class FileDownHttpService implements IHttpService {
 
     @Override
     public Map<String, String> getHttpHeadMap() {
-        return null;
+        return headerMap;
     }
 
     @Override
@@ -109,7 +109,7 @@ public class FileDownHttpService implements IHttpService {
         public String handleResponse(HttpResponse response) throws IOException {
             //响应码
             int code = response.getStatusLine().getStatusCode();
-            if (code == 200) {
+            if (code == 200 || code == 206) {
                 mHttpListener.onSuccess(response.getEntity());
             } else {
                 mHttpListener.onFail();
