@@ -51,6 +51,11 @@ public class DownFileManager implements IDownloadServiceCallable {
         if (downLoadItemInfo == null) {
             //根据文件路径查找
             List<DownLoadItemInfo> samesFile = mDownDao.findRecord(filePath);
+
+            //大于0表示下载
+            if (samesFile.size() > 0) {
+
+            }
         }
 
     }
