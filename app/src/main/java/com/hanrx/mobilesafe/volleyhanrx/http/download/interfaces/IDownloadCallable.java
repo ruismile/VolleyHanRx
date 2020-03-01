@@ -1,6 +1,8 @@
 package com.hanrx.mobilesafe.volleyhanrx.http.download.interfaces;
 
 
+import com.hanrx.mobilesafe.volleyhanrx.http.download.enmus.DownloadStatus;
+
 /**
  * 断点续传监听接口
  *

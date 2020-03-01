@@ -4,10 +4,12 @@ import android.database.Cursor;
 
 import com.hanrx.mobilesafe.volleyhanrx.db.BaseDao;
 import com.hanrx.mobilesafe.volleyhanrx.http.download.DownLoadItemInfo;
+import com.hanrx.mobilesafe.volleyhanrx.http.download.enmus.DownloadStatus;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 public class DownDao extends BaseDao<DownLoadItemInfo> {
@@ -118,6 +120,137 @@ public class DownDao extends BaseDao<DownLoadItemInfo> {
 
     }
 
+    public DownLoadItemInfo addRecrod(String url, String filePath, String displayName, int priority) {
+        synchronized (DownDao.class)
+        {
+            DownLoadItemInfo existDownloadInfo = findRecord(url, filePath);
+            if (existDownloadInfo == null)
+            {
+                DownLoadItemInfo record = new DownLoadItemInfo();
+                record.setId(generateRecordId());
+                record.setUrl(url);
+                record.setFilePath(filePath);
+                record.setDisplayName(displayName);
+                record.setStatus(DownloadStatus.waitting.getValue());
+                record.setTotalLen(0L);
+                record.setCurrentLen(0L);
+                java.text.SimpleDateFormat dateFormat = new java.text.SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+                record.setStartTime(dateFormat.format(new Date()));
+                record.setFinishTime("0");
+                record.setPriority(priority);
+                super.insert(record);
+                mDownLoadItemInfosList.add(record);
+                return record;
+            }
+            return null;
+        }
+    }
+
+    /**
+     * 更新下载记录
+     *
+     * @param record
+     *            下载记录
+     * @return
+     */
+    public int updateRecord(DownLoadItemInfo record)
+    {
+        DownLoadItemInfo where = new DownLoadItemInfo();
+        where.setId(record.getId());
+        int result = 0;
+        synchronized (DownDao.class)
+        {
+            try
+            {
+                result = super.update(record, where);
+            }
+            catch (Throwable e)
+            {
+            }
+            if (result > 0)
+            {
+                for (int i = 0; i < mDownLoadItemInfosList.size(); i++)
+                {
+                    if (mDownLoadItemInfosList.get(i).getId().intValue() == record.getId())
+                    {
+                        mDownLoadItemInfosList.set(i, record);
+                        break;
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 根据下载地址和下载文件路径查找下载记录
+     *
+     *            下载地址
+     * @param filePath
+     *            下载文件路径
+     * @return
+     */
+    public DownLoadItemInfo findSigleRecord(String filePath)
+    {
+        List<DownLoadItemInfo> downloadInfoList = findRecord(filePath);
+        if(downloadInfoList.isEmpty())
+        {
+            return null;
+        }
+        return downloadInfoList.get(0);
+    }
+
+    /**
+     * 根据id查找下载记录对象
+     *
+     * @param recordId
+     * @return
+     */
+    public DownLoadItemInfo findRecordById(int recordId)
+    {
+        synchronized (DownDao.class)
+        {
+            for (DownLoadItemInfo record :mDownLoadItemInfosList)
+            {
+                if (record.getId() == recordId)
+                {
+                    return record;
+                }
+            }
+
+            DownLoadItemInfo where = new DownLoadItemInfo();
+            where.setId(recordId);
+            List<DownLoadItemInfo> resultList = super.query(where);
+            if (resultList.size() > 0)
+            {
+                return resultList.get(0);
+            }
+            return null;
+        }
+
+    }
+    /**
+     * 根据id从内存中移除下载记录
+     *
+     * @param id
+     *            下载id
+     * @return true标示删除成功，否则false
+     */
+    public boolean removeRecordFromMemery(int id)
+    {
+        synchronized (DownLoadItemInfo.class)
+        {
+            for (int i = 0; i < mDownLoadItemInfosList.size(); i++)
+            {
+                if (mDownLoadItemInfosList.get(i).getId() == id)
+                {
+                    mDownLoadItemInfosList.remove(i);
+                    break;
+                }
+            }
+            return true;
+        }
+    }
 
 
     /**

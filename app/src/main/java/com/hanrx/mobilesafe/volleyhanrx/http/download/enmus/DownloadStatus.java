@@ -1,4 +1,4 @@
-package com.hanrx.mobilesafe.volleyhanrx.http.download;
+package com.hanrx.mobilesafe.volleyhanrx.http.download.enmus;
 
 public enum DownloadStatus {
     waitting(0),

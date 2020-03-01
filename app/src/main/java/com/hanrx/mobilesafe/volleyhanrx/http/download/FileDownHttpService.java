@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * 请求下载文件的策略
@@ -41,6 +42,11 @@ public class FileDownHttpService implements IHttpService {
      * httpClient 获取网络的回调
      */
     private HttpResponseHandler mHttpResponseHandler = new HttpResponseHandler();
+
+    /**
+     * 增加方法
+     */
+    private AtomicBoolean pause=new AtomicBoolean(false);
 
     @Override
     public void setUrl(String url) {
@@ -86,7 +92,7 @@ public class FileDownHttpService implements IHttpService {
 
     @Override
     public void pause() {
-
+        pause.compareAndSet(false,true);
     }
 
     @Override

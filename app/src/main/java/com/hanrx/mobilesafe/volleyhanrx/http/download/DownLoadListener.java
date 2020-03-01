@@ -3,6 +3,7 @@ package com.hanrx.mobilesafe.volleyhanrx.http.download;
 import android.os.Handler;
 import android.os.Looper;
 
+import com.hanrx.mobilesafe.volleyhanrx.http.download.enmus.DownloadStatus;
 import com.hanrx.mobilesafe.volleyhanrx.http.download.interfaces.IDownListener;
 import com.hanrx.mobilesafe.volleyhanrx.http.download.interfaces.IDownloadServiceCallable;
 import com.hanrx.mobilesafe.volleyhanrx.http.interfaces.IHttpService;

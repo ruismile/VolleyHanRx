@@ -4,9 +4,12 @@ import com.alibaba.fastjson.JSON;
 import com.hanrx.mobilesafe.volleyhanrx.http.interfaces.IHttpListener;
 import com.hanrx.mobilesafe.volleyhanrx.http.interfaces.IHttpService;
 
+import java.util.concurrent.FutureTask;
+
 public class HttpTask<T> implements Runnable{
 
     private IHttpService mHttpService;
+    private FutureTask futureTask;
 
     public HttpTask(RequestHolder<T> requestHolder) {
         mHttpService = requestHolder.getHttpService();
@@ -29,5 +32,32 @@ public class HttpTask<T> implements Runnable{
     @Override
     public void run() {
         mHttpService.excute();
+    }
+
+    /**
+     * 新增方法
+     */
+    public void start()
+    {
+        futureTask=new FutureTask(this,null);
+        try {
+            ThreadPoolManager.getInstance().execte(futureTask);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    /**
+     * 新增方法
+     */
+    public  void pause()
+    {
+        mHttpService.pause();
+        if(futureTask!=null)
+        {
+            ThreadPoolManager.getInstance().removeTask(futureTask);
+        }
+
     }
 }
