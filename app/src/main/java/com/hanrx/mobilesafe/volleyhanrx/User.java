@@ -1,9 +1,28 @@
 package com.hanrx.mobilesafe.volleyhanrx;
 
 public class User {
-    private String name;
+    public String name;
 
-    private String password;
+    public String password;
+
+    public String user_id;
+    public  Integer status;
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public String getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
+    }
 
     public String getName() {
         return name;

@@ -120,7 +120,7 @@ public class DownDao extends BaseDao<DownLoadItemInfo> {
 
     }
 
-    public DownLoadItemInfo addRecrod(String url, String filePath, String displayName, int priority) {
+    public int addRecrod(String url, String filePath, String displayName, int priority) {
         synchronized (DownDao.class)
         {
             DownLoadItemInfo existDownloadInfo = findRecord(url, filePath);
@@ -140,9 +140,9 @@ public class DownDao extends BaseDao<DownLoadItemInfo> {
                 record.setPriority(priority);
                 super.insert(record);
                 mDownLoadItemInfosList.add(record);
-                return record;
+                return record.getId();
             }
-            return null;
+            return -1;
         }
     }
 
